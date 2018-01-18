@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
-import { Header, Item, Icon, Container, Text, Content, Input, List, ListItem, Left, Right, Body, H1 } from 'native-base'
+import { Header, Item, Icon, Container, Text, Content, Input, List, ListItem, Left, Right, Body, H1, Button } from 'native-base'
+import { StackNavigator } from 'react-navigation'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu'
 })
 
-export default class App extends Component<{}> {
+class HomeScreen extends Component<{}> {
   constructor(props) {
     super(props)
 
@@ -151,3 +152,29 @@ export default class App extends Component<{}> {
     )
   }
 }
+
+const DetailsScreen = ({ navigation }) => (
+  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <Text>{navigation.state.params.place}</Text>
+    <Button onPress={() => navigation.goBack(null)}>
+      <Text>Go back</Text>
+    </Button>
+  </View>
+)
+
+const RootNavigator = StackNavigator(
+  {
+    Home: {
+      screen: HomeScreen
+    },
+    Details: {
+      path: 'stop/:place',
+      screen: DetailsScreen
+    }
+  },
+  {
+    headerMode: 'none'
+  }
+)
+
+export default RootNavigator
