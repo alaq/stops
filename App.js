@@ -3,9 +3,9 @@ import { Platform, StyleSheet, View } from 'react-native'
 import { Header, Item, Icon, Container, Text, Content, Input, List, ListItem, Left, Right, Body, H1, Button } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu'
+const device = Platform.select({
+  ios: 'You are using iOS',
+  android: 'You are using Android'
 })
 
 class HomeScreen extends Component<{}> {
@@ -135,6 +135,7 @@ class HomeScreen extends Component<{}> {
             >
               <H1>Stops</H1>
               <Text>Don't worry, we'll wake you up</Text>
+              <Text>{device}</Text>
               <Text>
                 {this.state.latitude} : {this.state.longitude}
               </Text>
