@@ -111,7 +111,15 @@ class HomeScreen extends Component<{}> {
                 </ListItem>
                 {this.state.searchResult.map(result => {
                   return (
-                    <ListItem key={result.id} icon>
+                    <ListItem
+                      key={result.id}
+                      icon
+                      onPress={() =>
+                        this.props.navigation.navigate('Details', {
+                          place: result
+                        })
+                      }
+                    >
                       <Left>
                         <Icon name="md-map" />
                       </Left>
@@ -156,8 +164,10 @@ class HomeScreen extends Component<{}> {
 
 const DetailsScreen = ({ navigation }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>{navigation.state.params.place}</Text>
-    <Button onPress={() => navigation.goBack(null)}>
+    <H1>{navigation.state.params.place.structured_formatting.main_text}</H1>
+    <Text>{navigation.state.params.place.structured_formatting.secondary_text}</Text>
+    <Text />
+    <Button style={{ alignSelf: 'auto' }} onPress={() => navigation.goBack(null)}>
       <Text>Go back</Text>
     </Button>
   </View>
