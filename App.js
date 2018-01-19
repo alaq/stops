@@ -1,6 +1,23 @@
 import React, { Component } from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
-import { Header, Item, Icon, Container, Text, Content, Input, List, ListItem, Left, Right, Body, H1, Button } from 'native-base'
+import {
+  Header,
+  Item,
+  Icon,
+  Container,
+  Text,
+  Content,
+  Input,
+  List,
+  ListItem,
+  Left,
+  Right,
+  Body,
+  H1,
+  Button,
+  Card,
+  CardItem
+} from 'native-base'
 import { StackNavigator } from 'react-navigation'
 
 const device = Platform.select({
@@ -80,7 +97,7 @@ class HomeScreen extends Component<{}> {
               alignItems: 'center',
               justifyContent: 'center',
               display: 'flex',
-              height: 680,
+              // height: 680,
               backgroundColor: 'white'
             }}
           >
@@ -91,7 +108,8 @@ class HomeScreen extends Component<{}> {
                   left: 0,
                   right: 0,
                   top: 0,
-                  zIndex: 2
+                  zIndex: 2,
+                  backgroundColor: 'white'
                 }}
               >
                 <ListItem
@@ -147,20 +165,26 @@ class HomeScreen extends Component<{}> {
               <Text>
                 {this.state.latitude} : {this.state.longitude}
               </Text>
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
             </View>
           </View>
         </Content>
+        <GeofenceList />
       </Container>
     )
   }
 }
+
+const GeofenceList = () => (
+  <Card>
+    <CardItem>
+      <Body>
+        <Text>
+          You are going to <Text style={{ fontWeight: 'bold' }}>Baguette & Company</Text>
+        </Text>
+      </Body>
+    </CardItem>
+  </Card>
+)
 
 const DetailsScreen = ({ navigation }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
