@@ -97,7 +97,7 @@ class HomeScreen extends Component<{}> {
               alignItems: 'center',
               justifyContent: 'center',
               display: 'flex',
-              // height: 680,
+              height: 680,
               backgroundColor: 'white'
             }}
           >
@@ -165,6 +165,17 @@ class HomeScreen extends Component<{}> {
               <Text>
                 {this.state.latitude} : {this.state.longitude}
               </Text>
+              <Text />
+              <Text />
+              <Text />
+              <Text />
+              <Text />
+              <Text />
+              <Text />
+              <Text />
+              <Text />
+              <Text />
+              <Text />
             </View>
           </View>
         </Content>
@@ -175,15 +186,26 @@ class HomeScreen extends Component<{}> {
 }
 
 const GeofenceList = () => (
-  <Card>
-    <CardItem>
-      <Body>
-        <Text>
-          You are going to <Text style={{ fontWeight: 'bold' }}>Baguette & Company</Text>
-        </Text>
-      </Body>
-    </CardItem>
-  </Card>
+  <Button
+    rounded
+    block
+    iconLeft
+    style={{
+      position: 'absolute',
+      bottom: 25,
+      right: 15,
+      left: 15,
+      shadowOpacity: 0.35,
+      shadowRadius: 10,
+      shadowColor: 'black',
+      shadowOffset: { height: 0, width: 0 }
+    }}
+  >
+    <Icon name="bus" />
+    <Text>
+      You are going to <Text style={{ fontWeight: 'bold' }}>Baguette & Company</Text>
+    </Text>
+  </Button>
 )
 
 const DetailsScreen = ({ navigation }) => (
