@@ -16,7 +16,9 @@ import {
   H1,
   Button,
   Card,
-  CardItem
+  CardItem,
+  Root,
+  Toast
 } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 
@@ -36,7 +38,8 @@ class HomeScreen extends Component<{}> {
       searchInput: '',
       searchResult: [],
       isLoading: false,
-      destination: 'Baguette & Company'
+      destination: 'Baguette & Company',
+      showToast: false
     }
     this.handleSearch = this.handleSearch.bind(this)
   }
@@ -62,7 +65,13 @@ class HomeScreen extends Component<{}> {
           const jsonPredictions = JSON.parse(response._bodyInit).predictions
           this.setState({ searchResult: jsonPredictions })
         })
-        .catch(console.log)
+        .catch(() => {
+          Toast.show({
+            text: 'No internet connectivity, cannot load destinations.',
+            position: 'bottom',
+            buttonText: 'Okay'
+          })
+        })
     }
 
     if (text.length > 2 && !this.state.isLoading) {
@@ -241,4 +250,8 @@ const RootNavigator = StackNavigator(
   }
 )
 
-export default RootNavigator
+export default () => (
+  <Root>
+    <RootNavigator />
+  </Root>
+)
