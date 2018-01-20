@@ -57,12 +57,12 @@ class HomeScreen extends Component<{}> {
 
   handleSearch(text) {
     const placesAutocomplete = text => {
-      fetch('https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g&input=' + text).then(
-        response => {
+      fetch('https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g&input=' + text)
+        .then(response => {
           const jsonPredictions = JSON.parse(response._bodyInit).predictions
           this.setState({ searchResult: jsonPredictions })
-        }
-      )
+        })
+        .catch(console.log)
     }
 
     if (text.length > 2 && !this.state.isLoading) {
