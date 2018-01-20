@@ -102,7 +102,11 @@ class HomeScreen extends Component<{}> {
               onChangeText={text => this.handleSearch(text)}
               value={this.state.searchInput}
             />
-            {this.state.searchInput ? <Icon name="ios-close-circle" onPress={() => this.setState({ searchInput: '' })} /> : <Text />}
+            {this.state.searchInput ? (
+              <Icon name="ios-close-circle" onPress={() => this.setState({ searchInput: '', searchResult: [] })} />
+            ) : (
+              <Text />
+            )}
           </Item>
         </Header>
         <Content>
