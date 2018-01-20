@@ -35,7 +35,8 @@ class HomeScreen extends Component<{}> {
       error: null,
       searchInput: '',
       searchResult: [],
-      isLoading: false
+      isLoading: false,
+      destination: 'Baguette & Company'
     }
     this.handleSearch = this.handleSearch.bind(this)
   }
@@ -179,13 +180,13 @@ class HomeScreen extends Component<{}> {
             </View>
           </View>
         </Content>
-        <GeofenceList />
+        <GeofenceList destination={this.state.destination} />
       </Container>
     )
   }
 }
 
-const GeofenceList = () => (
+const GeofenceList = props => (
   <Button
     rounded
     block
@@ -203,7 +204,7 @@ const GeofenceList = () => (
   >
     <Icon name="bus" />
     <Text>
-      You are going to <Text style={{ fontWeight: 'bold' }}>Baguette & Company</Text>
+      You are going to <Text style={{ fontWeight: 'bold', color: 'white' }}>{props.destination}</Text>
     </Text>
   </Button>
 )
