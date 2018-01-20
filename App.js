@@ -42,6 +42,7 @@ class HomeScreen extends Component<{}> {
       showToast: false
     }
     this.handleSearch = this.handleSearch.bind(this)
+    this.setDestination = this.setDestination.bind(this)
   }
 
   componentDidMount() {
@@ -56,6 +57,10 @@ class HomeScreen extends Component<{}> {
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     )
+  }
+
+  setDestination(destination) {
+    this.setState({ destination: destination })
   }
 
   handleSearch(text) {
@@ -144,7 +149,8 @@ class HomeScreen extends Component<{}> {
                       icon
                       onPress={() =>
                         this.props.navigation.navigate('Details', {
-                          place: result
+                          place: result,
+                          setDestination: this.setDestination
                         })
                       }
                     >
@@ -224,7 +230,17 @@ const DetailsScreen = ({ navigation }) => (
     <Text>{navigation.state.params.place.structured_formatting.secondary_text}</Text>
     <Text />
     <Text />
-    <Button large dark block iconLeft style={{ alignSelf: 'auto' }} onPress={() => navigation.goBack(null)}>
+    <Button
+      large
+      dark
+      block
+      iconLeft
+      style={{ alignSelf: 'auto' }}
+      onPress={() => {
+        navigation.state.params.setDestination(navigation.state.params.place.structured_formatting.main_text)
+        navigation.goBack(null)
+      }}
+    >
       <Icon name="bus" />
       <Text>I am going there</Text>
     </Button>
