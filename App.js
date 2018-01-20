@@ -38,7 +38,7 @@ class HomeScreen extends Component<{}> {
       searchInput: '',
       searchResult: [],
       isLoading: false,
-      destination: 'Baguette & Company',
+      destination: '',
       showToast: false
     }
     this.handleSearch = this.handleSearch.bind(this)
@@ -199,7 +199,7 @@ class HomeScreen extends Component<{}> {
             </View>
           </View>
         </Content>
-        <GeofenceList destination={this.state.destination} />
+        {this.state.destination ? <GeofenceList destination={this.state.destination} /> : <Text />}
       </Container>
     )
   }
