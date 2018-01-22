@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { Platform, StyleSheet, View, StatusBar } from 'react-native'
 import {
   Header,
   Item,
@@ -94,7 +94,8 @@ class HomeScreen extends Component<{}> {
   render() {
     return (
       <Container>
-        <Header searchBar rounded>
+        <Header searchBar rounded style={{ backgroundColor: 'darkblue' }}>
+          <StatusBar barStyle="light-content" />
           <Item>
             <Icon name="md-map" />
             <Input
