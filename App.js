@@ -108,6 +108,34 @@ class HomeScreen extends Component<{}> {
       notifyOnEntry: true
     })
 
+    BackgroundGeolocation.getGeofences(function(geofences) {
+      for (var n = 0, len = geofences.length; n < len; n++) {
+        var geofence = geofences[n]
+        console.log('geofence', geofence)
+        // var marker = new google.maps.Circle({
+        //     radius: parseInt(geofence.radius, 10),
+        //     center: new google.maps.LatLng(geofence.latitude, geofence.longitude),
+        //     map: myMapInstance
+        // });
+      }
+    })
+
+    BackgroundGeolocation.onGeofence(function(geofence, taskId) {
+      try {
+        var identifier = geofence.identifier
+        var action = geofence.action
+        var location = geofence.location
+
+        console.log('- A Geofence transition occurred')
+        console.log('  identifier: ', identifier)
+        console.log('  action: ', action)
+        console.log('  location: ', JSON.stringify(location))
+      } catch (e) {
+        console.error('An error occurred in my code!', e)
+      }
+      // Be sure to call #finish!!
+      bgGeo.finish(taskId)
+    })
   }
 
   setDestination(destination) {
@@ -154,6 +182,7 @@ class HomeScreen extends Component<{}> {
   }
   onLocation(location) {
     // console.log('- [event] location: ', location)
+    onsole.log(location.coords.latitude, location.coords.longitude)
   }
   onError(error) {
     console.warn('- [event] location error ', error)
@@ -167,23 +196,6 @@ class HomeScreen extends Component<{}> {
   onMotionChange(location) {
     console.log('- [event] motionchange: ', location.isMoving, location)
   }
-
-  BackgroundGeolocation.onGeofence(function(geofence, taskId) {
-    try {
-      var identifier = geofence.identifier
-      var action = geofence.action
-      var location = geofence.location
-
-      console.log('- A Geofence transition occurred')
-      console.log('  identifier: ', identifier)
-      console.log('  action: ', action)
-      console.log('  location: ', JSON.stringify(location))
-    } catch (e) {
-      console.error('An error occurred in my code!', e)
-    }
-    // Be sure to call #finish!!
-    bgGeo.finish(taskId)
-  })
 
   render() {
     return (
