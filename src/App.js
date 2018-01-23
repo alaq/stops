@@ -4,6 +4,8 @@ import { Header, Item, Icon, Container, Text, Content, Input, List, ListItem, Le
 import { StackNavigator } from 'react-navigation'
 import BackgroundGeolocation from 'react-native-background-geolocation'
 
+import DetailsScreen from './DetailsScreen'
+
 const device = Platform.select({
   ios: 'You are using iOS',
   android: 'You are using Android'
@@ -317,33 +319,6 @@ const GeofenceList = props => (
       You are going to <Text style={{ fontWeight: 'bold', color: 'white' }}>{props.destination}</Text>
     </Text>
   </Button>
-)
-
-const DetailsScreen = ({ navigation }) => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <H1>{navigation.state.params.place.structured_formatting.main_text}</H1>
-    <Text>{navigation.state.params.place.structured_formatting.secondary_text}</Text>
-    <Text />
-    <Text />
-    <Button
-      large
-      dark
-      block
-      iconLeft
-      style={{ alignSelf: 'auto' }}
-      onPress={() => {
-        navigation.state.params.setDestination(navigation.state.params.place.structured_formatting.main_text)
-        navigation.goBack(null)
-      }}
-    >
-      <Icon name="bus" />
-      <Text>I am going there</Text>
-    </Button>
-    <Text />
-    <Button style={{ alignSelf: 'auto' }} onPress={() => navigation.goBack(null)}>
-      <Text>Go back</Text>
-    </Button>
-  </View>
 )
 
 const RootNavigator = StackNavigator(
