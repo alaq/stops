@@ -40,7 +40,9 @@ class HomeScreen extends Component<{}> {
       searchResult: [],
       isLoading: false,
       destination: '',
-      showToast: false
+      showToast: false,
+      gflatitude: 37.33233141,
+      gflongitude: -122.0312186
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.setDestination = this.setDestination.bind(this)
@@ -69,6 +71,8 @@ class HomeScreen extends Component<{}> {
 
     // This event fires when the user toggles location-services authorization
     BackgroundGeolocation.on('providerchange', this.onProviderChange)
+
+    BackgroundGeolocation.on('geofence', this.onGeofence)
 
     ////
     // 2.  #configure the plugin (just once for life-time of app)
@@ -103,9 +107,10 @@ class HomeScreen extends Component<{}> {
     BackgroundGeolocation.addGeofence({
       identifier: 'Home',
       radius: 200,
-      latitude: 37.35687073,
-      longitude: -122.11663286,
-      notifyOnEntry: true
+      latitude: this.state.gflatitude,
+      longitude: this.state.gflongitude,
+      notifyOnEntry: true,
+      notifyOnDwell: true
     })
 
     BackgroundGeolocation.getGeofences(function(geofences) {
@@ -134,7 +139,7 @@ class HomeScreen extends Component<{}> {
         console.error('An error occurred in my code!', e)
       }
       // Be sure to call #finish!!
-      bgGeo.finish(taskId)
+      BackgroundGeolocation.finish(taskId)
     })
   }
 
@@ -182,7 +187,7 @@ class HomeScreen extends Component<{}> {
   }
   onLocation(location) {
     // console.log('- [event] location: ', location)
-    onsole.log(location.coords.latitude, location.coords.longitude)
+    console.log(location.coords.latitude, location.coords.longitude)
   }
   onError(error) {
     console.warn('- [event] location error ', error)
@@ -195,6 +200,10 @@ class HomeScreen extends Component<{}> {
   }
   onMotionChange(location) {
     console.log('- [event] motionchange: ', location.isMoving, location)
+  }
+
+  onGeofence(geofence) {
+    console.log('we hit the geofence!')
   }
 
   render() {
@@ -292,7 +301,9 @@ class HomeScreen extends Component<{}> {
               <Text>
                 {this.state.latitude} : {this.state.longitude}
               </Text>
-              <Text>37.35687073 : -122.11663286</Text>
+              <Text>
+                {this.state.gflatitude} : {this.state.gflongitude}
+              </Text>
               <Text />
               <Text />
               <Text />
