@@ -27,7 +27,7 @@ const SearchResult = props => (
           onPress={() =>
             props.navigation.navigate('Details', {
               place: result,
-              setDestination: this.setDestination
+              setDestination: props.setDestination
             })
           }
         >

@@ -229,6 +229,7 @@ class HomeScreen extends Component {
                   searchInput={this.state.searchInput}
                   searchResult={this.state.searchResult}
                   navigation={this.props.navigation}
+                  setDestination={this.setDestination}
                 />
               </View>
             ) : (
