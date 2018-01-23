@@ -1,33 +1,15 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, View, StatusBar } from 'react-native'
-import {
-  Header,
-  Item,
-  Icon,
-  Container,
-  Text,
-  Content,
-  Input,
-  List,
-  ListItem,
-  Left,
-  Right,
-  Body,
-  H1,
-  Button,
-  Card,
-  CardItem,
-  Root,
-  Toast
-} from 'native-base'
+import { Platform, View, StatusBar } from 'react-native'
+import { Header, Item, Icon, Container, Text, Content, Input, List, ListItem, Left, Body, H1, Button, Root, Toast } from 'native-base'
 import { StackNavigator } from 'react-navigation'
+import BackgroundGeolocation from 'react-native-background-geolocation'
 
 const device = Platform.select({
   ios: 'You are using iOS',
   android: 'You are using Android'
 })
 
-class HomeScreen extends Component<{}> {
+class HomeScreen extends Component {
   constructor(props) {
     super(props)
 
@@ -39,14 +21,18 @@ class HomeScreen extends Component<{}> {
       searchResult: [],
       isLoading: false,
       destination: '',
-      showToast: false
+      showToast: false,
+      gflatitude: 37.33233141,
+      gflongitude: -122.0312186
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.setDestination = this.setDestination.bind(this)
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
+    console.log('component is mounting')
+
+    navigator.geolocation.watchPosition(
       position => {
         this.setState({
           latitude: position.coords.latitude,
@@ -57,10 +43,80 @@ class HomeScreen extends Component<{}> {
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     )
+
+    BackgroundGeolocation.on('location', this.onLocation, this.onError)
+
+    // This handler fires when movement states changes (stationary->moving; moving->stationary)
+    BackgroundGeolocation.on('motionchange', this.onMotionChange)
+
+    // This event fires when a change in motion activity is detected
+    BackgroundGeolocation.on('activitychange', this.onActivityChange)
+
+    // This event fires when the user toggles location-services authorization
+    BackgroundGeolocation.on('providerchange', this.onProviderChange)
+
+    BackgroundGeolocation.on('geofence', this.onGeofence)
+
+    ////
+    // 2.  #configure the plugin (just once for life-time of app)
+    //
+    BackgroundGeolocation.configure(
+      {
+        // Geolocation Config
+        desiredAccuracy: 0,
+        distanceFilter: 10,
+        // Activity Recognition
+        stopTimeout: 1,
+        // Application config
+        debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
+        logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+        stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
+        startOnBoot: true // <-- Auto start tracking when device is powered-up.
+      },
+      state => {
+        console.log('- BackgroundGeolocation is configured and ready: ', state.enabled)
+
+        if (!state.enabled) {
+          ////
+          // 3. Start tracking!
+          //
+          BackgroundGeolocation.start(function() {
+            console.log('- Start success')
+          })
+        }
+      }
+    )
+
+    BackgroundGeolocation.onGeofence(function(geofence, taskId) {
+      try {
+        var identifier = geofence.identifier
+        var action = geofence.action
+        var location = geofence.location
+
+        console.log('- A Geofence transition occurred')
+        console.log('  identifier: ', identifier)
+        console.log('  action: ', action)
+        console.log('  location: ', JSON.stringify(location))
+      } catch (err) {
+        console.error('An error occurred in my code!', err)
+      }
+      // Be sure to call #finish!!
+      BackgroundGeolocation.finish(taskId)
+    })
   }
 
   setDestination(destination) {
     this.setState({ destination: destination })
+
+    // Now we set the geofence for the destination
+    BackgroundGeolocation.addGeofence({
+      identifier: 'Home',
+      radius: 200,
+      latitude: this.state.gflatitude,
+      longitude: this.state.gflongitude,
+      notifyOnEntry: true,
+      notifyOnDwell: true
+    })
   }
 
   handleSearch(text) {
@@ -89,6 +145,37 @@ class HomeScreen extends Component<{}> {
     } else {
       this.setState({ searchInput: text })
     }
+  }
+
+  componentWillUnmount() {
+    // Remove BackgroundGeolocation listeners
+    BackgroundGeolocation.un('location', this.onLocation)
+    BackgroundGeolocation.un('motionchange', this.onMotionChange)
+    BackgroundGeolocation.un('activitychange', this.onActivityChange)
+    BackgroundGeolocation.un('providerchange', this.onProviderChange)
+
+    // Or just remove them all-at-once
+    BackgroundGeolocation.removeListeners()
+  }
+  onLocation(location) {
+    // console.log('- [event] location: ', location)
+    console.log(location.coords.latitude, location.coords.longitude)
+  }
+  onError(error) {
+    console.warn('- [event] location error ', error)
+  }
+  onActivityChange(activity) {
+    console.log('- [event] activitychange: ', activity) // eg: 'on_foot', 'still', 'in_vehicle'
+  }
+  onProviderChange(provider) {
+    console.log('- [event] providerchange: ', provider)
+  }
+  onMotionChange(location) {
+    console.log('- [event] motionchange: ', location.isMoving, location)
+  }
+
+  onGeofence(geofence) {
+    console.log('we hit the geofence!', geofence)
   }
 
   render() {
@@ -185,6 +272,9 @@ class HomeScreen extends Component<{}> {
               <Text>{device}</Text>
               <Text>
                 {this.state.latitude} : {this.state.longitude}
+              </Text>
+              <Text>
+                {this.state.gflatitude} : {this.state.gflongitude}
               </Text>
               <Text />
               <Text />
