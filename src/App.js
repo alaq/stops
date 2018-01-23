@@ -6,6 +6,8 @@ import BackgroundGeolocation from 'react-native-background-geolocation'
 
 import DetailsScreen from './DetailsScreen'
 import GeofenceList from './GeofenceList'
+import SearchHeader from './SearchHeader'
+import SearchResult from './SearchResult'
 
 const device = Platform.select({
   ios: 'You are using iOS',
@@ -184,6 +186,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <Container>
+        {/* <SearchHeader /> */}
         <Header searchBar rounded style={{ backgroundColor: 'darkblue' }}>
           <StatusBar barStyle="light-content" />
           <Item>
@@ -212,7 +215,7 @@ class HomeScreen extends Component {
             }}
           >
             {this.state.searchInput ? (
-              <List
+              <View
                 style={{
                   position: 'absolute',
                   left: 0,
@@ -222,43 +225,12 @@ class HomeScreen extends Component {
                   backgroundColor: 'white'
                 }}
               >
-                <ListItem
-                  icon
-                  onPress={() =>
-                    this.props.navigation.navigate('Details', {
-                      place: this.state.searchInput
-                    })
-                  }
-                >
-                  <Left>
-                    <Icon name="ios-search" />
-                  </Left>
-                  <Body>
-                    <Text>Search "{this.state.searchInput}" as an address...</Text>
-                  </Body>
-                </ListItem>
-                {this.state.searchResult.map(result => {
-                  return (
-                    <ListItem
-                      key={result.id}
-                      icon
-                      onPress={() =>
-                        this.props.navigation.navigate('Details', {
-                          place: result,
-                          setDestination: this.setDestination
-                        })
-                      }
-                    >
-                      <Left>
-                        <Icon name="md-map" />
-                      </Left>
-                      <Body>
-                        <Text>{result.structured_formatting.main_text}</Text>
-                      </Body>
-                    </ListItem>
-                  )
-                })}
-              </List>
+                <SearchResult
+                  searchInput={this.state.searchInput}
+                  searchResult={this.state.searchResult}
+                  navigation={this.props.navigation}
+                />
+              </View>
             ) : (
               <Text style={{ height: 0 }} />
             )}
