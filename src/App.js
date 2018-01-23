@@ -5,6 +5,7 @@ import { StackNavigator } from 'react-navigation'
 import BackgroundGeolocation from 'react-native-background-geolocation'
 
 import DetailsScreen from './DetailsScreen'
+import GeofenceList from './GeofenceList'
 
 const device = Platform.select({
   ios: 'You are using iOS',
@@ -297,29 +298,6 @@ class HomeScreen extends Component {
     )
   }
 }
-
-const GeofenceList = props => (
-  <Button
-    rounded
-    block
-    iconLeft
-    style={{
-      position: 'absolute',
-      bottom: 25,
-      right: 15,
-      left: 15,
-      shadowOpacity: 0.35,
-      shadowRadius: 10,
-      shadowColor: 'black',
-      shadowOffset: { height: 0, width: 0 }
-    }}
-  >
-    <Icon name="bus" />
-    <Text>
-      You are going to <Text style={{ fontWeight: 'bold', color: 'white' }}>{props.destination}</Text>
-    </Text>
-  </Button>
-)
 
 const RootNavigator = StackNavigator(
   {
