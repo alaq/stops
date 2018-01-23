@@ -21,6 +21,7 @@ import {
   Toast
 } from 'native-base'
 import { StackNavigator } from 'react-navigation'
+import BackgroundGeolocation from 'react-native-background-geolocation'
 
 const device = Platform.select({
   ios: 'You are using iOS',
@@ -46,7 +47,7 @@ class HomeScreen extends Component<{}> {
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.watchPosition(
       position => {
         this.setState({
           latitude: position.coords.latitude,
@@ -57,6 +58,56 @@ class HomeScreen extends Component<{}> {
       error => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     )
+
+    BackgroundGeolocation.on('location', this.onLocation, this.onError)
+
+    // This handler fires when movement states changes (stationary->moving; moving->stationary)
+    BackgroundGeolocation.on('motionchange', this.onMotionChange)
+
+    // This event fires when a change in motion activity is detected
+    BackgroundGeolocation.on('activitychange', this.onActivityChange)
+
+    // This event fires when the user toggles location-services authorization
+    BackgroundGeolocation.on('providerchange', this.onProviderChange)
+
+    ////
+    // 2.  #configure the plugin (just once for life-time of app)
+    //
+    BackgroundGeolocation.configure(
+      {
+        // Geolocation Config
+        desiredAccuracy: 0,
+        distanceFilter: 10,
+        // Activity Recognition
+        stopTimeout: 1,
+        // Application config
+        debug: false, // <-- enable this hear sounds for background-geolocation life-cycle.
+        logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+        stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
+        startOnBoot: true // <-- Auto start tracking when device is powered-up.
+      },
+      state => {
+        console.log('- BackgroundGeolocation is configured and ready: ', state.enabled)
+
+        if (!state.enabled) {
+          ////
+          // 3. Start tracking!
+          //
+          BackgroundGeolocation.start(function() {
+            console.log('- Start success')
+          })
+        }
+      }
+    )
+
+    BackgroundGeolocation.addGeofence({
+      identifier: 'Home',
+      radius: 200,
+      latitude: 37.35687073,
+      longitude: -122.11663286,
+      notifyOnEntry: true
+    })
+
   }
 
   setDestination(destination) {
@@ -90,6 +141,49 @@ class HomeScreen extends Component<{}> {
       this.setState({ searchInput: text })
     }
   }
+
+  componentWillUnmount() {
+    // Remove BackgroundGeolocation listeners
+    BackgroundGeolocation.un('location', this.onLocation)
+    BackgroundGeolocation.un('motionchange', this.onMotionChange)
+    BackgroundGeolocation.un('activitychange', this.onActivityChange)
+    BackgroundGeolocation.un('providerchange', this.onProviderChange)
+
+    // Or just remove them all-at-once
+    BackgroundGeolocation.removeListeners()
+  }
+  onLocation(location) {
+    // console.log('- [event] location: ', location)
+  }
+  onError(error) {
+    console.warn('- [event] location error ', error)
+  }
+  onActivityChange(activity) {
+    console.log('- [event] activitychange: ', activity) // eg: 'on_foot', 'still', 'in_vehicle'
+  }
+  onProviderChange(provider) {
+    console.log('- [event] providerchange: ', provider)
+  }
+  onMotionChange(location) {
+    console.log('- [event] motionchange: ', location.isMoving, location)
+  }
+
+  BackgroundGeolocation.onGeofence(function(geofence, taskId) {
+    try {
+      var identifier = geofence.identifier
+      var action = geofence.action
+      var location = geofence.location
+
+      console.log('- A Geofence transition occurred')
+      console.log('  identifier: ', identifier)
+      console.log('  action: ', action)
+      console.log('  location: ', JSON.stringify(location))
+    } catch (e) {
+      console.error('An error occurred in my code!', e)
+    }
+    // Be sure to call #finish!!
+    bgGeo.finish(taskId)
+  })
 
   render() {
     return (
@@ -186,6 +280,7 @@ class HomeScreen extends Component<{}> {
               <Text>
                 {this.state.latitude} : {this.state.longitude}
               </Text>
+              <Text>37.35687073 : -122.11663286</Text>
               <Text />
               <Text />
               <Text />
