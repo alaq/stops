@@ -1,25 +1,6 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, View, StatusBar } from 'react-native'
-import {
-  Header,
-  Item,
-  Icon,
-  Container,
-  Text,
-  Content,
-  Input,
-  List,
-  ListItem,
-  Left,
-  Right,
-  Body,
-  H1,
-  Button,
-  Card,
-  CardItem,
-  Root,
-  Toast
-} from 'native-base'
+import { Platform, View, StatusBar } from 'react-native'
+import { Header, Item, Icon, Container, Text, Content, Input, List, ListItem, Left, Body, H1, Button, Root, Toast } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import BackgroundGeolocation from 'react-native-background-geolocation'
 
@@ -28,7 +9,7 @@ const device = Platform.select({
   android: 'You are using Android'
 })
 
-class HomeScreen extends Component<{}> {
+class HomeScreen extends Component {
   constructor(props) {
     super(props)
 
@@ -49,6 +30,8 @@ class HomeScreen extends Component<{}> {
   }
 
   componentDidMount() {
+    console.log('component is mounting')
+
     navigator.geolocation.watchPosition(
       position => {
         this.setState({
@@ -104,27 +87,6 @@ class HomeScreen extends Component<{}> {
       }
     )
 
-    BackgroundGeolocation.addGeofence({
-      identifier: 'Home',
-      radius: 200,
-      latitude: this.state.gflatitude,
-      longitude: this.state.gflongitude,
-      notifyOnEntry: true,
-      notifyOnDwell: true
-    })
-
-    BackgroundGeolocation.getGeofences(function(geofences) {
-      for (var n = 0, len = geofences.length; n < len; n++) {
-        var geofence = geofences[n]
-        console.log('geofence', geofence)
-        // var marker = new google.maps.Circle({
-        //     radius: parseInt(geofence.radius, 10),
-        //     center: new google.maps.LatLng(geofence.latitude, geofence.longitude),
-        //     map: myMapInstance
-        // });
-      }
-    })
-
     BackgroundGeolocation.onGeofence(function(geofence, taskId) {
       try {
         var identifier = geofence.identifier
@@ -135,8 +97,8 @@ class HomeScreen extends Component<{}> {
         console.log('  identifier: ', identifier)
         console.log('  action: ', action)
         console.log('  location: ', JSON.stringify(location))
-      } catch (e) {
-        console.error('An error occurred in my code!', e)
+      } catch (err) {
+        console.error('An error occurred in my code!', err)
       }
       // Be sure to call #finish!!
       BackgroundGeolocation.finish(taskId)
@@ -145,6 +107,16 @@ class HomeScreen extends Component<{}> {
 
   setDestination(destination) {
     this.setState({ destination: destination })
+
+    // Now we set the geofence for the destination
+    BackgroundGeolocation.addGeofence({
+      identifier: 'Home',
+      radius: 200,
+      latitude: this.state.gflatitude,
+      longitude: this.state.gflongitude,
+      notifyOnEntry: true,
+      notifyOnDwell: true
+    })
   }
 
   handleSearch(text) {
@@ -203,7 +175,7 @@ class HomeScreen extends Component<{}> {
   }
 
   onGeofence(geofence) {
-    console.log('we hit the geofence!')
+    console.log('we hit the geofence!', geofence)
   }
 
   render() {
