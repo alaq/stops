@@ -32,6 +32,7 @@ class HomeScreen extends Component {
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.setDestination = this.setDestination.bind(this)
+    this.clearSearch = this.clearSearch.bind(this)
   }
 
   componentDidMount() {
@@ -183,26 +184,14 @@ class HomeScreen extends Component {
     console.log('we hit the geofence!', geofence)
   }
 
+  clearSearch() {
+    this.setState({ searchInput: '', searchResult: [] })
+  }
+
   render() {
     return (
       <Container>
-        {/* <SearchHeader /> */}
-        <Header searchBar rounded style={{ backgroundColor: 'darkblue' }}>
-          <StatusBar barStyle="light-content" />
-          <Item>
-            <Icon name="md-map" />
-            <Input
-              placeholder="Enter a stop, or an address"
-              onChangeText={text => this.handleSearch(text)}
-              value={this.state.searchInput}
-            />
-            {this.state.searchInput ? (
-              <Icon name="ios-close-circle" onPress={() => this.setState({ searchInput: '', searchResult: [] })} />
-            ) : (
-              <Text />
-            )}
-          </Item>
-        </Header>
+        <SearchHeader searchInput={this.state.searchInput} clearSearch={this.clearSearch} handleSearch={this.handleSearch} />
         <Content>
           <View
             style={{
