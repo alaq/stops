@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { Platform, View } from 'react-native'
-import { Container, Text, Content, H1, Root, Toast } from 'native-base'
+import { Button, Container, Text, Content, H1, Root, Toast } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import BackgroundGeolocation from 'react-native-background-geolocation'
 import PushNotification from 'react-native-push-notification'
 
 import DetailsScreen from './DetailsScreen'
+import Onboarding from './Onboarding'
 import GeofenceList from './GeofenceList'
 import SearchHeader from './SearchHeader'
 import SearchResult from './SearchResult'
+import checkIfFirstLaunch from './checkIfFirstLaunch'
 
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
@@ -65,11 +67,19 @@ class HomeScreen extends Component {
       searchResult: [],
       isLoading: false,
       destination: '',
-      showToast: false
+      showToast: false,
+      isFirstLaunch: false,
+      hasCheckedAsyncStorage: false
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.setDestination = this.setDestination.bind(this)
     this.clearSearch = this.clearSearch.bind(this)
+  }
+
+  async componentWillMount() {
+    const isFirstLaunch = await checkIfFirstLaunch()
+    this.setState({ isFirstLaunch, hasCheckedAsyncStorage: true })
+    if (isFirstLaunch) this.props.navigation.navigate('Onboarding')
   }
 
   componentDidMount() {
@@ -259,6 +269,8 @@ class HomeScreen extends Component {
   }
 
   render() {
+    if (!this.state.hasCheckedAsyncStorage) return null
+
     return (
       <Container>
         <SearchHeader searchInput={this.state.searchInput} clearSearch={this.clearSearch} handleSearch={this.handleSearch} />
@@ -321,6 +333,10 @@ const RootNavigator = StackNavigator(
     Details: {
       path: 'stop/:place',
       screen: DetailsScreen
+    },
+    Onboarding: {
+      path: 'stop/onboarding',
+      screen: Onboarding
     }
   },
   {
