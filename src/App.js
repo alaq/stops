@@ -262,14 +262,13 @@ class HomeScreen extends Component {
     return (
       <Container>
         <SearchHeader searchInput={this.state.searchInput} clearSearch={this.clearSearch} handleSearch={this.handleSearch} />
-        <Content>
+        <Content style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
           <View
             style={{
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
               display: 'flex',
-              height: 680,
               backgroundColor: 'white'
             }}
           >
@@ -299,33 +298,16 @@ class HomeScreen extends Component {
                 flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                zIndex: 1
+                zIndex: 1,
+                paddingBottom: 100
               }}
             >
               <H1>Stops</H1>
               <Text>Don't worry, we'll wake you up</Text>
-              <Text>{device}</Text>
-              <Text>
-                {this.state.latitude} : {this.state.longitude}
-              </Text>
-              <Text>
-                {this.state.gflatitude} : {this.state.gflongitude}
-              </Text>
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
-              <Text />
             </View>
           </View>
         </Content>
-        {this.state.destination ? <GeofenceList destination={this.state.destination} /> : <Text />}
+        {this.state.destination ? <GeofenceList destination={this.state.destination} /> : <Text style={{ height: 0 }} />}
       </Container>
     )
   }
