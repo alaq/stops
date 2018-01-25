@@ -19,7 +19,6 @@ const SearchResult = props => (
       </Body>
     </ListItem>
     {props.searchResult.map(result => {
-      console.log(result.structured_formatting.main_text)
       return (
         <ListItem
           key={result.id}
@@ -35,7 +34,7 @@ const SearchResult = props => (
             <Icon name="md-map" />
           </Left>
           <Body>
-            <Text>{result.structured_formatting.main_text}</Text>
+            <Text>{result.name}</Text>
           </Body>
         </ListItem>
       )

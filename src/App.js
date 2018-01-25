@@ -165,9 +165,9 @@ class HomeScreen extends Component {
         ongoing: false, // (optional) set whether this is an "ongoing" notification
 
         /* iOS and Android properties */
-        title: 'My Notification Title', // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
-        message: 'My Notification Message', // (required)
-        playSound: false, // (optional) default: true
+        title: 'You have reached your stop!', // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
+        message: 'You have reached' + this.state.destination, // (required)
+        playSound: true, // (optional) default: true
         soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
         // number: '10', // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
         repeatType: 'day', // (Android only) Repeating interval. Could be one of `week`, `day`, `hour`, `minute, `time`. If specified as time, it should be accompanied by one more parameter 'repeatTime` which should the number of milliseconds between each interval
@@ -192,9 +192,14 @@ class HomeScreen extends Component {
 
   handleSearch(text) {
     const placesAutocomplete = text => {
-      fetch('https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g&input=' + text)
+      fetch(
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=40.705808,-74.009010&radius=50000&type=transit_station&key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g&keyword=' +
+          text
+      )
+        // fetch('https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g&input=' + text)
+        // https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=40.705808,-74.009010&radius=50000&type=transit_station&keyword=bedf&key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g
         .then(response => {
-          const jsonPredictions = JSON.parse(response._bodyInit).predictions
+          const jsonPredictions = JSON.parse(response._bodyText).results
           this.setState({ searchResult: jsonPredictions })
         })
         .catch(() => {
