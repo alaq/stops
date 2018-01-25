@@ -177,7 +177,7 @@ class HomeScreen extends Component {
   }
 
   setDestination(destination) {
-    this.setState({ destination: destination })
+    this.setState({ destination: destination, searchResult: [] })
 
     // Now we set the geofence for the destination
     BackgroundGeolocation.addGeofence({
@@ -189,7 +189,7 @@ class HomeScreen extends Component {
       notifyOnDwell: true
     })
 
-    console.log('Geofence added:', destination.geometry.location.lat, destination.geometry.location.lng)
+    console.log('Geofence added:', destination.name, destination.geometry.location.lat, destination.geometry.location.lng)
   }
 
   handleSearch(text) {
