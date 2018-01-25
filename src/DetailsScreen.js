@@ -15,7 +15,8 @@ const DetailsScreen = ({ navigation }) => (
       iconLeft
       style={{ alignSelf: 'auto' }}
       onPress={() => {
-        navigation.state.params.setDestination(navigation.state.params.place.name)
+        // console.log('desti', navigation.state.params.place.name)
+        navigation.state.params.setDestination(navigation.state.params.place)
         navigation.goBack(null)
       }}
     >

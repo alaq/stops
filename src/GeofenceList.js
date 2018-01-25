@@ -19,7 +19,7 @@ const GeofenceList = props => (
   >
     <Icon name="bus" />
     <Text>
-      You are going to <Text style={{ fontWeight: 'bold', color: 'white' }}>{props.destination}</Text>
+      You are going to <Text style={{ fontWeight: 'bold', color: 'white' }}>{props.destination.name}</Text>
     </Text>
   </Button>
 )

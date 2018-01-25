@@ -166,7 +166,7 @@ class HomeScreen extends Component {
 
         /* iOS and Android properties */
         title: 'You have reached your stop!', // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
-        message: 'You have reached' + this.state.destination, // (required)
+        message: 'You have reached', // + this.state.destination, // (required)
         playSound: true, // (optional) default: true
         soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
         // number: '10', // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
