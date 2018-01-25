@@ -4,8 +4,8 @@ import { Text, H1, Button, Icon } from 'native-base'
 
 const DetailsScreen = ({ navigation }) => (
   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <H1>{navigation.state.params.place.structured_formatting.main_text}</H1>
-    <Text>{navigation.state.params.place.structured_formatting.secondary_text}</Text>
+    <H1>{navigation.state.params.place.name}</H1>
+    {/* <Text>{navigation.state.params.place.structured_formatting.secondary_text}</Text> */}
     <Text />
     <Text />
     <Button
@@ -15,7 +15,7 @@ const DetailsScreen = ({ navigation }) => (
       iconLeft
       style={{ alignSelf: 'auto' }}
       onPress={() => {
-        navigation.state.params.setDestination(navigation.state.params.place.structured_formatting.main_text)
+        navigation.state.params.setDestination(navigation.state.params.place.name)
         navigation.goBack(null)
       }}
     >

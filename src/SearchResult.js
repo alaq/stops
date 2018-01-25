@@ -30,9 +30,7 @@ const SearchResult = props => (
             })
           }
         >
-          <Left>
-            <Icon name="md-map" />
-          </Left>
+          <Left>{result.types.includes('subway_station') ? <Icon name="md-subway" /> : <Icon name="md-bus" />}</Left>
           <Body>
             <Text>{result.name}</Text>
           </Body>
