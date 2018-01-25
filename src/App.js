@@ -65,9 +65,7 @@ class HomeScreen extends Component {
       searchResult: [],
       isLoading: false,
       destination: '',
-      showToast: false,
-      gflatitude: 37.33233141,
-      gflongitude: -122.0312186
+      showToast: false
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.setDestination = this.setDestination.bind(this)
@@ -177,12 +175,12 @@ class HomeScreen extends Component {
   }
 
   setDestination(destination) {
-    this.setState({ destination: destination, searchResult: [] })
+    this.setState({ destination: destination, searchResult: [], searchInput: '' })
 
     // Now we set the geofence for the destination
     BackgroundGeolocation.addGeofence({
       identifier: 'Home',
-      radius: 200,
+      radius: 100,
       latitude: destination.geometry.location.lat,
       longitude: destination.geometry.location.lng,
       notifyOnEntry: true,

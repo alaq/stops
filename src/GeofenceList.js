@@ -1,27 +1,29 @@
 import React from 'react'
-import { Text, Button, Icon } from 'native-base'
+import { View } from 'react-native'
+import { Text } from 'native-base'
 
 const GeofenceList = props => (
-  <Button
-    rounded
-    block
-    iconLeft
+  <View
     style={{
       position: 'absolute',
       bottom: 25,
       right: 15,
       left: 15,
-      shadowOpacity: 0.35,
-      shadowRadius: 10,
+      shadowOpacity: 0.25,
+      shadowRadius: 25,
       shadowColor: 'black',
-      shadowOffset: { height: 0, width: 0 }
+      shadowOffset: { height: 0, width: 0 },
+      padding: 15,
+      backgroundColor: 'white'
     }}
   >
-    <Icon name="bus" />
     <Text>
-      You are going to <Text style={{ fontWeight: 'bold', color: 'white' }}>{props.destination.name}</Text>
+      You are going to <Text style={{ fontWeight: 'bold' }}>{props.destination.name}</Text>
     </Text>
-  </Button>
+    <Text>
+      Your ETA is <Text style={{ fontWeight: 'bold' }}>45 minutes</Text>.
+    </Text>
+  </View>
 )
 
 export default GeofenceList
