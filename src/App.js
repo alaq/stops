@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Platform, View } from 'react-native'
+import { Platform, View, AsyncStorage } from 'react-native'
 import { Button, Container, Text, Content, H1, Root, Toast } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import BackgroundGeolocation from 'react-native-background-geolocation'
@@ -77,9 +77,9 @@ class HomeScreen extends Component {
   }
 
   async componentWillMount() {
+    // AsyncStorage.clear() // Use when you want to display the onboarding screen again
     const isFirstLaunch = await checkIfFirstLaunch()
     this.setState({ isFirstLaunch, hasCheckedAsyncStorage: true })
-    if (isFirstLaunch) this.props.navigation.navigate('Onboarding')
   }
 
   componentDidMount() {
@@ -271,57 +271,59 @@ class HomeScreen extends Component {
   render() {
     if (!this.state.hasCheckedAsyncStorage) return null
 
-    return (
-      <Container>
-        <SearchHeader searchInput={this.state.searchInput} clearSearch={this.clearSearch} handleSearch={this.handleSearch} />
-        <Content style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              display: 'flex',
-              backgroundColor: 'white'
-            }}
-          >
-            {this.state.searchInput ? (
-              <View
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  zIndex: 2,
-                  backgroundColor: 'white'
-                }}
-              >
-                <SearchResult
-                  searchInput={this.state.searchInput}
-                  searchResult={this.state.searchResult}
-                  navigation={this.props.navigation}
-                  setDestination={this.setDestination}
-                />
-              </View>
-            ) : (
-              <Text style={{ height: 0 }} />
-            )}
+    if (this.state.isFirstLaunch) return <Onboarding />
+    else
+      return (
+        <Container>
+          <SearchHeader searchInput={this.state.searchInput} clearSearch={this.clearSearch} handleSearch={this.handleSearch} />
+          <Content style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
             <View
               style={{
                 flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                zIndex: 1,
-                paddingBottom: 100
+                display: 'flex',
+                backgroundColor: 'white'
               }}
             >
-              <H1>Stops</H1>
-              <Text>Don't worry, we'll wake you up</Text>
+              {this.state.searchInput ? (
+                <View
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    zIndex: 2,
+                    backgroundColor: 'white'
+                  }}
+                >
+                  <SearchResult
+                    searchInput={this.state.searchInput}
+                    searchResult={this.state.searchResult}
+                    navigation={this.props.navigation}
+                    setDestination={this.setDestination}
+                  />
+                </View>
+              ) : (
+                <Text style={{ height: 0 }} />
+              )}
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 1,
+                  paddingBottom: 100
+                }}
+              >
+                <H1>Stops</H1>
+                <Text>Don't worry, we'll wake you up</Text>
+              </View>
             </View>
-          </View>
-        </Content>
-        {this.state.destination ? <GeofenceList destination={this.state.destination} /> : <Text style={{ height: 0 }} />}
-      </Container>
-    )
+          </Content>
+          {this.state.destination ? <GeofenceList destination={this.state.destination} /> : <Text style={{ height: 0 }} />}
+        </Container>
+      )
   }
 }
 
