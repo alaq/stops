@@ -183,11 +183,13 @@ class HomeScreen extends Component {
     BackgroundGeolocation.addGeofence({
       identifier: 'Home',
       radius: 200,
-      latitude: this.state.gflatitude,
-      longitude: this.state.gflongitude,
+      latitude: destination.geometry.location.lat,
+      longitude: destination.geometry.location.lng,
       notifyOnEntry: true,
       notifyOnDwell: true
     })
+
+    console.log('Geofence added:', destination.geometry.location.lat, destination.geometry.location.lng)
   }
 
   handleSearch(text) {
