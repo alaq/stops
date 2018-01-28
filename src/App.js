@@ -127,7 +127,10 @@ class HomeScreen extends Component {
         startOnBoot: true // <-- Auto start tracking when device is powered-up.
       },
       state => {
-        console.log('- BackgroundGeolocation is configured and ready: ', state.enabled)
+        console.log(
+          '- BackgroundGeolocation is configured and ready: ',
+          state.enabled
+        )
 
         if (!state.enabled) {
           ////
@@ -155,6 +158,8 @@ class HomeScreen extends Component {
       }
       // Be sure to call #finish!!
       BackgroundGeolocation.finish(taskId)
+
+      BackgroundGeolocation.removeGeofence(identifier)
 
       PushNotification.localNotification({
         /* Android Only Properties */
@@ -185,11 +190,15 @@ class HomeScreen extends Component {
   }
 
   setDestination(destination) {
-    this.setState({ destination: destination, searchResult: [], searchInput: '' })
+    this.setState({
+      destination: destination,
+      searchResult: [],
+      searchInput: ''
+    })
 
     // Now we set the geofence for the destination
     BackgroundGeolocation.addGeofence({
-      identifier: 'Home',
+      identifier: destination.name,
       radius: 100,
       latitude: destination.geometry.location.lat,
       longitude: destination.geometry.location.lng,
@@ -197,7 +206,12 @@ class HomeScreen extends Component {
       notifyOnDwell: true
     })
 
-    console.log('Geofence added:', destination.name, destination.geometry.location.lat, destination.geometry.location.lng)
+    console.log(
+      'Geofence added:',
+      destination.name,
+      destination.geometry.location.lat,
+      destination.geometry.location.lng
+    )
   }
 
   handleSearch(text) {
@@ -275,7 +289,11 @@ class HomeScreen extends Component {
     else
       return (
         <Container>
-          <SearchHeader searchInput={this.state.searchInput} clearSearch={this.clearSearch} handleSearch={this.handleSearch} />
+          <SearchHeader
+            searchInput={this.state.searchInput}
+            clearSearch={this.clearSearch}
+            handleSearch={this.handleSearch}
+          />
           <Content style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
             <View
               style={{
@@ -321,7 +339,11 @@ class HomeScreen extends Component {
               </View>
             </View>
           </Content>
-          {this.state.destination ? <GeofenceList destination={this.state.destination} /> : <Text style={{ height: 0 }} />}
+          {this.state.destination ? (
+            <GeofenceList destination={this.state.destination} />
+          ) : (
+            <Text style={{ height: 0 }} />
+          )}
         </Container>
       )
   }
