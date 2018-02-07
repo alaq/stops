@@ -1,9 +1,9 @@
 import React from 'react'
-import { List, ListItem, Left, Icon, Body, Text } from 'native-base'
+import { List, ListItem, Left, Icon, Body, Text, View } from 'native-base'
 
 const SearchResult = props => (
   <List>
-    <ListItem
+    {/* <ListItem
       icon
       onPress={() =>
         props.navigation.navigate('Details', {
@@ -17,12 +17,24 @@ const SearchResult = props => (
       <Body>
         <Text>Search "{props.searchInput}" as an address...</Text>
       </Body>
-    </ListItem>
+    </ListItem> */}
     {props.searchResult.map(result => {
       return (
         <ListItem
           key={result.id}
           icon
+          style={{
+            borderRadius: 10,
+            backgroundColor: 'white',
+            marginRight: 15,
+            marginBottom: 5,
+            marginTop: 17,
+            padding: 25,
+            shadowColor: 'black',
+            shadowOpacity: 0.1,
+            shadowRadius: 5,
+            shadowOffset: { width: 0, height: 0 }
+          }}
           onPress={() =>
             props.navigation.navigate('Details', {
               place: result,
