@@ -76,6 +76,7 @@ class HomeScreen extends Component {
     this.handleSearch = this.handleSearch.bind(this)
     this.setDestination = this.setDestination.bind(this)
     this.clearSearch = this.clearSearch.bind(this)
+    this.handleCancel = this.handleCancel.bind(this)
   }
 
   async componentWillMount() {
@@ -297,6 +298,11 @@ class HomeScreen extends Component {
     getDirections(data)
   }
 
+  handleCancel() {
+    BackgroundGeolocation.removeGeofence(this.state.destination.name)
+    this.setState({ destination: '' })
+  }
+
   render() {
     if (!this.state.hasCheckedAsyncStorage) return null
 
@@ -349,10 +355,16 @@ class HomeScreen extends Component {
                 <Text>Don't worry, we'll wake you up</Text>
                 <Text />
                 {this.state.destination ? (
-                  <Button large dark block iconLeft style={{ alignSelf: 'auto' }} onPress={this.handleGetDirections}>
-                    <Icon name="md-map" />
-                    <Text>Open in Google Maps</Text>
-                  </Button>
+                  <View>
+                    <Button large dark block iconLeft style={{ alignSelf: 'auto' }} onPress={this.handleGetDirections}>
+                      <Icon name="md-map" />
+                      <Text>Open in Google Maps</Text>
+                    </Button>
+                    <Text />
+                    <Button bordered warning style={{ alignSelf: 'auto' }} onPress={this.handleCancel} style={{ alignItems: 'center' }}>
+                      <Text>Cancel</Text>
+                    </Button>
+                  </View>
                 ) : (
                   <Text />
                 )}
