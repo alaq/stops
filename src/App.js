@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Platform, View, AsyncStorage } from 'react-native'
-import { Button, Container, Text, Content, H1, Root, Toast } from 'native-base'
+import { Button, Container, Text, Content, H1, Root, Toast, Icon } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import BackgroundGeolocation from 'react-native-background-geolocation'
 import PushNotification from 'react-native-push-notification'
@@ -276,6 +276,27 @@ class HomeScreen extends Component {
     this.setState({ searchInput: '', searchResult: [] })
   }
 
+  handleGetDirections = () => {
+    const data = {
+      source: {
+        latitude: -33.8356372,
+        longitude: 18.6947617
+      },
+      destination: {
+        latitude: -33.8600024,
+        longitude: 18.697459
+      },
+      params: [
+        {
+          key: 'dirflg',
+          value: 'w'
+        }
+      ]
+    }
+
+    getDirections(data)
+  }
+
   render() {
     if (!this.state.hasCheckedAsyncStorage) return null
 
@@ -327,10 +348,14 @@ class HomeScreen extends Component {
                 <H1>Stops</H1>
                 <Text>Don't worry, we'll wake you up</Text>
                 <Text />
-                <Button large dark block iconLeft style={{ alignSelf: 'auto' }} onPress={() => {}}>
-                  <Icon name="bus" />
-                  <Text>Open in Google Maps</Text>
-                </Button>
+                {this.state.destination ? (
+                  <Button large dark block iconLeft style={{ alignSelf: 'auto' }} onPress={this.handleGetDirections}>
+                    <Icon name="md-map" />
+                    <Text>Open in Google Maps</Text>
+                  </Button>
+                ) : (
+                  <Text />
+                )}
                 <Text />
               </View>
             </View>
