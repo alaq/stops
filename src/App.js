@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { Platform, View, AsyncStorage } from 'react-native'
-import { Button, Container, Text, Content, H1, Root, Toast, Icon } from 'native-base'
+import { Button, Container, Text, Content, H1, Root, Toast, Icon, StyleProvider } from 'native-base'
+import getTheme from '../native-base-theme/components'
+// import material from '../native-base-theme/variables/material'
+// import commonColor from '../native-base-theme/variables/commonColor'
+import platform from '../native-base-theme/variables/platform'
 import { StackNavigator } from 'react-navigation'
 import BackgroundGeolocation from 'react-native-background-geolocation'
 import PushNotification from 'react-native-push-notification'
@@ -50,11 +54,6 @@ PushNotification.configure({
    * - if not, you must call PushNotificationsHandler.requestPermissions() later
    */
   requestPermissions: true
-})
-
-const device = Platform.select({
-  ios: 'You are using iOS',
-  android: 'You are using Android'
 })
 
 class HomeScreen extends Component {
@@ -309,71 +308,73 @@ class HomeScreen extends Component {
     if (this.state.isFirstLaunch) return <Onboarding />
     else
       return (
-        <Container>
-          <SearchHeader searchInput={this.state.searchInput} clearSearch={this.clearSearch} handleSearch={this.handleSearch} />
-          <Content style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                display: 'flex',
-                backgroundColor: 'white'
-              }}
-            >
-              {this.state.searchInput ? (
-                <View
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    zIndex: 2,
-                    backgroundColor: 'white'
-                  }}
-                >
-                  <SearchResult
-                    searchInput={this.state.searchInput}
-                    searchResult={this.state.searchResult}
-                    navigation={this.props.navigation}
-                    setDestination={this.setDestination}
-                  />
-                </View>
-              ) : (
-                <Text style={{ height: 0 }} />
-              )}
+        <StyleProvider style={getTheme(platform)}>
+          <Container>
+            <SearchHeader searchInput={this.state.searchInput} clearSearch={this.clearSearch} handleSearch={this.handleSearch} />
+            <Content style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
               <View
                 style={{
                   flex: 1,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  zIndex: 1,
-                  paddingBottom: 100
+                  display: 'flex',
+                  backgroundColor: 'white'
                 }}
               >
-                <H1>Stops</H1>
-                <Text>Don't worry, we'll wake you up</Text>
-                <Text />
-                {this.state.destination ? (
-                  <View>
-                    <Button large dark block iconLeft style={{ alignSelf: 'auto' }} onPress={this.handleGetDirections}>
-                      <Icon name="md-map" />
-                      <Text>Open in Google Maps</Text>
-                    </Button>
-                    <Text />
-                    <Button bordered warning style={{ alignSelf: 'auto' }} onPress={this.handleCancel} style={{ alignItems: 'center' }}>
-                      <Text>Cancel</Text>
-                    </Button>
+                {this.state.searchInput ? (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      zIndex: 2,
+                      backgroundColor: 'white'
+                    }}
+                  >
+                    <SearchResult
+                      searchInput={this.state.searchInput}
+                      searchResult={this.state.searchResult}
+                      navigation={this.props.navigation}
+                      setDestination={this.setDestination}
+                    />
                   </View>
                 ) : (
-                  <Text />
+                  <Text style={{ height: 0 }} />
                 )}
-                <Text />
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1,
+                    paddingBottom: 100
+                  }}
+                >
+                  <H1>Stops</H1>
+                  <Text>Don't worry, we'll wake you up</Text>
+                  <Text />
+                  {this.state.destination ? (
+                    <View>
+                      <Button large dark block iconLeft style={{ alignSelf: 'auto' }} onPress={this.handleGetDirections}>
+                        <Icon name="md-map" />
+                        <Text>Open in Google Maps</Text>
+                      </Button>
+                      <Text />
+                      <Button bordered warning style={{ alignSelf: 'auto' }} onPress={this.handleCancel} style={{ alignItems: 'center' }}>
+                        <Text>Cancel</Text>
+                      </Button>
+                    </View>
+                  ) : (
+                    <Text />
+                  )}
+                  <Text />
+                </View>
               </View>
-            </View>
-          </Content>
-          {this.state.destination ? <GeofenceList destination={this.state.destination} /> : <Text style={{ height: 0 }} />}
-        </Container>
+            </Content>
+            {this.state.destination ? <GeofenceList destination={this.state.destination} /> : <Text style={{ height: 0 }} />}
+          </Container>
+        </StyleProvider>
       )
   }
 }
