@@ -3,8 +3,8 @@ import { StatusBar } from 'react-native'
 import { Header, Item, Icon, Input, Text } from 'native-base'
 
 const SearchHeader = props => (
-  <Header searchBar rounded style={{ backgroundColor: 'darkblue' }}>
-    <StatusBar barStyle="light-content" />
+  <Header searchBar rounded>
+    <StatusBar barStyle="dark-content" />
     <Item>
       <Icon name="md-map" />
       <Input placeholder="Enter a stop, or an address" onChangeText={text => props.handleSearch(text)} value={props.searchInput} />
