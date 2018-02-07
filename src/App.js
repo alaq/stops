@@ -12,6 +12,8 @@ import SearchHeader from './SearchHeader'
 import SearchResult from './SearchResult'
 import checkIfFirstLaunch from './checkIfFirstLaunch'
 
+import getDirections from 'react-native-google-maps-directions'
+
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
   onRegister: function(token) {
@@ -127,10 +129,7 @@ class HomeScreen extends Component {
         startOnBoot: true // <-- Auto start tracking when device is powered-up.
       },
       state => {
-        console.log(
-          '- BackgroundGeolocation is configured and ready: ',
-          state.enabled
-        )
+        console.log('- BackgroundGeolocation is configured and ready: ', state.enabled)
 
         if (!state.enabled) {
           ////
@@ -206,12 +205,7 @@ class HomeScreen extends Component {
       notifyOnDwell: true
     })
 
-    console.log(
-      'Geofence added:',
-      destination.name,
-      destination.geometry.location.lat,
-      destination.geometry.location.lng
-    )
+    console.log('Geofence added:', destination.name, destination.geometry.location.lat, destination.geometry.location.lng)
   }
 
   handleSearch(text) {
@@ -289,11 +283,7 @@ class HomeScreen extends Component {
     else
       return (
         <Container>
-          <SearchHeader
-            searchInput={this.state.searchInput}
-            clearSearch={this.clearSearch}
-            handleSearch={this.handleSearch}
-          />
+          <SearchHeader searchInput={this.state.searchInput} clearSearch={this.clearSearch} handleSearch={this.handleSearch} />
           <Content style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
             <View
               style={{
@@ -336,14 +326,16 @@ class HomeScreen extends Component {
               >
                 <H1>Stops</H1>
                 <Text>Don't worry, we'll wake you up</Text>
+                <Text />
+                <Button large dark block iconLeft style={{ alignSelf: 'auto' }} onPress={() => {}}>
+                  <Icon name="bus" />
+                  <Text>Open in Google Maps</Text>
+                </Button>
+                <Text />
               </View>
             </View>
           </Content>
-          {this.state.destination ? (
-            <GeofenceList destination={this.state.destination} />
-          ) : (
-            <Text style={{ height: 0 }} />
-          )}
+          {this.state.destination ? <GeofenceList destination={this.state.destination} /> : <Text style={{ height: 0 }} />}
         </Container>
       )
   }
