@@ -6,7 +6,7 @@ const SearchHeader = props => (
   <Header searchBar rounded>
     <StatusBar barStyle="dark-content" />
     <Item>
-      <Icon name="md-map" />
+      <Icon name="ios-search" />
       <Input placeholder="Enter a stop, or an address" onChangeText={text => props.handleSearch(text)} value={props.searchInput} />
       {props.searchInput ? <Icon name="ios-close-circle" onPress={props.clearSearch} /> : <Text />}
     </Item>
