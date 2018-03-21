@@ -207,15 +207,13 @@ class HomeScreen extends Component {
 
     console.log('Geofence added:', destination.name, destination.geometry.location.lat, destination.geometry.location.lng)
   }
-
   handleSearch(text) {
     const placesAutocomplete = text => {
       fetch(
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=40.705808,-74.009010&radius=50000&type=transit_station&key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g&keyword=' +
-          text
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${this.state.latitude},${
+          this.state.longitude
+        }&radius=50000&type=transit_station&key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g&keyword=` + text
       )
-        // fetch('https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g&input=' + text)
-        // https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=40.705808,-74.009010&radius=50000&type=transit_station&keyword=bedf&key=AIzaSyBa2s7Y4_idfCl6UQOhAOJtasI01mQwv0g
         .then(response => {
           const jsonPredictions = JSON.parse(response._bodyText).results
           this.setState({ searchResult: jsonPredictions })
